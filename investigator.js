@@ -1,66 +1,96 @@
-// Section switching
+// SECTION SWITCHING
 function showSection(id) {
     document.querySelectorAll('.section').forEach(sec => sec.style.display = "none");
     document.getElementById(id).style.display = "block";
 
-    if(id === 'news') loadNews();
+    if (id === 'news') loadNews();
+    if (id === 'reports') loadCategoryLists();
 }
 
-// Sample user report data
-const userReports = [
-    {name: "Alice", report: "Phishing email received from fake bank site."},
-    {name: "Bob", report: "Account hacked on social media, suspicious messages sent."},
-    {name: "Charlie", report: "Received scam WhatsApp messages asking for money."}
-];
+// ===============================
+//   CATEGORY-BASED USER REPORTS
+// ===============================
 
-// Populate user buttons
-const userList = document.getElementById('user-list');
-userReports.forEach((user, index) => {
-    const btn = document.createElement('button');
-    btn.classList.add('user-btn');
-    btn.innerText = user.name;
-    btn.addEventListener('click', () => showReportDetails(index));
-    userList.appendChild(btn);
-});
+const reportCategories = {
+    hack: [
+        { name: "Alice", report: "Password stolen, cannot access account." },
+        { name: "Daniel", report: "Unauthorized login detected in email." }
+    ],
+    malware: [
+        { name: "Bob", report: "Device infected with ransomware." },
+        { name: "Emily", report: "Popup malware spreading in browser." }
+    ],
+    cyberbully: [
+        { name: "Charlie", report: "Harassed on social media with threats." },
+        { name: "Farah", report: "Online bullying from classmates." }
+    ]
+};
 
-// Show report + chat
-function showReportDetails(index) {
+// TOGGLE DROPDOWN
+function toggleCategory(id) {
+    const list = document.getElementById(id);
+    list.style.display = (list.style.display === "block") ? "none" : "block";
+}
+
+// LOAD USERS INTO DROPDOWNS
+function loadCategoryLists() {
+    loadList('hack', 'hack-list');
+    loadList('malware', 'malware-list');
+    loadList('cyberbully', 'cyberbully-list');
+}
+
+function loadList(category, elementId) {
+    const container = document.getElementById(elementId);
+    container.innerHTML = '';
+
+    reportCategories[category].forEach((user, index) => {
+        const btn = document.createElement('button');
+        btn.classList.add('user-btn');
+        btn.innerText = user.name;
+        btn.addEventListener('click', () => showReportDetails(category, index));
+        container.appendChild(btn);
+    });
+}
+
+// SHOW DETAILS + CHATBOX
+function showReportDetails(category, index) {
+    const selected = reportCategories[category][index];
+
     const details = document.getElementById('report-details');
     details.innerHTML = `
-        <h3>${userReports[index].name}</h3>
-        <div id="report-text">
-            <p>${userReports[index].report}</p>
-        </div>
+        <h3>${selected.name}</h3>
+        <p>${selected.report}</p>
 
-        <div id="chatbox">
-            <!-- Messages appear here -->
-        </div>
+        <div id="chatbox"></div>
 
         <div id="message-area">
             <input type="text" id="investigatorMessage" placeholder="Type your message...">
-            <button onclick="sendInvestigatorMessage(${index})">Send</button>
+            <button onclick="sendInvestigatorMessage()">Send</button>
         </div>
     `;
 }
 
-// Send message to chatbox
-function sendInvestigatorMessage(index) {
+// SEND MESSAGE TO CHATBOX
+function sendInvestigatorMessage() {
     const input = document.getElementById('investigatorMessage');
     const text = input.value.trim();
-    if(text === "") return;
+    if (text === "") return;
 
     const chatbox = document.getElementById('chatbox');
 
     const msg = document.createElement('div');
     msg.classList.add('message', 'investigator-msg');
     msg.innerText = text;
-    chatbox.appendChild(msg);
 
+    chatbox.appendChild(msg);
     chatbox.scrollTop = chatbox.scrollHeight;
     input.value = "";
 }
 
-// Load news feed from API (replace YOUR_API_KEY)
+// ==========================
+//    NEWS API + DASHBOARD
+// ==========================
+
 async function loadNews() {
     const newsFeed = document.getElementById('news-feed');
     newsFeed.innerHTML = "Loading news...";
@@ -81,11 +111,10 @@ async function loadNews() {
         console.error(err);
     }
 
-    // KNIME dashboard URL
     document.getElementById('dashboard-frame').src = "path-to-knime-dashboard.html";
 }
 
-// Initialize
+// INIT
 loadNews();
 
 

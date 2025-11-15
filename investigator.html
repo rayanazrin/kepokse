@@ -45,12 +45,24 @@
 
             <div class="reports-container">
 
-                <!-- User list -->
+                <!-- Category buttons + dropdown lists -->
                 <div style="width:250px;">
-                    <div id="user-list"></div>
+                    
+                    <!-- Hack Category -->
+                    <button class="menu-btn" onclick="toggleCategory('hack-list')">🛠 Hack</button>
+                    <div id="hack-list" class="dropdown-list"></div>
+
+                    <!-- Malware Category -->
+                    <button class="menu-btn" onclick="toggleCategory('malware-list')">🦠 Malware</button>
+                    <div id="malware-list" class="dropdown-list"></div>
+
+                    <!-- Cyberbully Category -->
+                    <button class="menu-btn" onclick="toggleCategory('cyberbully-list')">😡 Cyberbully</button>
+                    <div id="cyberbully-list" class="dropdown-list"></div>
+
                 </div>
 
-                <!-- Report details + chat -->
+                <!-- Details -->
                 <div style="flex:1;">
                     <div id="report-details">
                         <h3>Select a user to see report details</h3>
@@ -59,7 +71,6 @@
 
             </div>
         </div>
-
     </div>
 </div>
 

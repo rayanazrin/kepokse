@@ -122,6 +122,12 @@ body {
     color: black;
     align-self: flex-start;
 }
+.dropdown-list {
+    display: none;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
 
 /* Message input area */
 #message-area {
